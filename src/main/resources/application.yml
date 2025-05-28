@@ -1,0 +1,7 @@
+spring:
+  application:
+    name: elephant
+  datasource:
+    url: jdbc:postgresql://localhost:5432/elephant
+    username: postgres
+    password: postgres
