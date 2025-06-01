@@ -2,6 +2,7 @@ package com.github.elephant.management.controller;
 
 import com.github.elephant.management.dto.BoardCreateRequest;
 import com.github.elephant.management.dto.BoardResponse;
+import com.github.elephant.management.dto.BoardUpdateRequest;
 import com.github.elephant.management.service.BoardService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -27,6 +28,11 @@ public class BoardController {
     @GetMapping
     public ResponseEntity<List<BoardResponse>> getAllBoards() {
         return ResponseEntity.status(HttpStatus.OK).body(boardService.getAllBoards());
+    }
+
+    @PutMapping("{id}")
+    public ResponseEntity<BoardResponse> updateBoardById(@PathVariable("id") Long id, @RequestBody @Valid BoardUpdateRequest request) {
+        return ResponseEntity.status(HttpStatus.OK).body(boardService.updateBoardById(id, request));
     }
 
     @DeleteMapping("{id}")

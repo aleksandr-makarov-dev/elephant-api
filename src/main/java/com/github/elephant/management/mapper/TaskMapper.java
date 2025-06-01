@@ -2,6 +2,7 @@ package com.github.elephant.management.mapper;
 
 import com.github.elephant.management.dto.TaskCreateRequest;
 import com.github.elephant.management.dto.TaskResponse;
+import com.github.elephant.management.dto.TaskUpdateRequest;
 import com.github.elephant.management.entity.TaskEntity;
 import org.springframework.stereotype.Component;
 
@@ -13,6 +14,7 @@ public class TaskMapper {
                 .title(request.title())
                 .description(request.description())
                 .priority(request.priority())
+                .dueDate(request.dueDate())
                 .build();
     }
 
@@ -26,6 +28,16 @@ public class TaskMapper {
                 entity.getCreatedAt(),
                 entity.getDueDate()
         );
+    }
+
+    public TaskEntity updateTaskEntity(TaskEntity entity, TaskUpdateRequest request) {
+        entity.setTitle(request.title());
+        entity.setDescription(request.description());
+        entity.setStatus(request.status());
+        entity.setPriority(request.priority());
+        entity.setDueDate(request.dueDate());
+
+        return entity;
     }
 
 }

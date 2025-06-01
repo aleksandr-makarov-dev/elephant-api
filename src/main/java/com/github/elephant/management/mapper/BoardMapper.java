@@ -2,6 +2,7 @@ package com.github.elephant.management.mapper;
 
 import com.github.elephant.management.dto.BoardCreateRequest;
 import com.github.elephant.management.dto.BoardResponse;
+import com.github.elephant.management.dto.BoardUpdateRequest;
 import com.github.elephant.management.entity.BoardEntity;
 import org.springframework.stereotype.Component;
 
@@ -21,7 +22,14 @@ public class BoardMapper {
         return BoardEntity.builder()
                 .title(request.title())
                 .description(request.description())
-                .status(request.status())
                 .build();
+    }
+
+    public BoardEntity updateBoardEntity(BoardEntity entity, BoardUpdateRequest request) {
+        entity.setTitle(request.title());
+        entity.setDescription(request.description());
+        entity.setStatus(request.status());
+
+        return entity;
     }
 }

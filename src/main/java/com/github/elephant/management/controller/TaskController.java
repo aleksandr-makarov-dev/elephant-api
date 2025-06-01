@@ -2,6 +2,7 @@ package com.github.elephant.management.controller;
 
 import com.github.elephant.management.dto.TaskCreateRequest;
 import com.github.elephant.management.dto.TaskResponse;
+import com.github.elephant.management.dto.TaskUpdateRequest;
 import com.github.elephant.management.service.TaskService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -20,12 +21,17 @@ public class TaskController {
 
     @PostMapping
     public ResponseEntity<TaskResponse> createTask(@RequestBody @Valid TaskCreateRequest request) {
-        return ResponseEntity.status(HttpStatus.OK).body(taskService.createTask(request));
+        return ResponseEntity.status(HttpStatus.CREATED).body(taskService.createTask(request));
     }
 
     @GetMapping
     public ResponseEntity<List<TaskResponse>> getAllTasksByBoardId(@RequestParam(value = "boardId") Long boardId) {
         return ResponseEntity.status(HttpStatus.OK).body(taskService.getAllTasksByBoardId(boardId));
+    }
+
+    @PutMapping("{id}")
+    public ResponseEntity<TaskResponse> updateTaskById(@PathVariable("id") Long id, @RequestBody @Valid TaskUpdateRequest request) {
+        return ResponseEntity.status(HttpStatus.OK).body(taskService.updateTaskById(id, request));
     }
 
     @DeleteMapping("{id}")

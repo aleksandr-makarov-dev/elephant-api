@@ -1,4 +1,4 @@
-package com.github.elephant.exception;
+package com.github.elephant.core.exception;
 
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
@@ -29,6 +29,14 @@ public class GlobalControllerAdvice {
                 ));
 
         problemDetail.setProperty("errors", errors);
+
+        return ResponseEntity.status(problemDetail.getStatus()).body(problemDetail);
+    }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<ProblemDetail> handleException(Exception ex) {
+        ProblemDetail problemDetail = ProblemDetail
+                .forStatusAndDetail(HttpStatus.INTERNAL_SERVER_ERROR, ex.getMessage());
 
         return ResponseEntity.status(problemDetail.getStatus()).body(problemDetail);
     }

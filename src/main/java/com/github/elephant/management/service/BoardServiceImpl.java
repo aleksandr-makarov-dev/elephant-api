@@ -2,7 +2,9 @@ package com.github.elephant.management.service;
 
 import com.github.elephant.management.dto.BoardCreateRequest;
 import com.github.elephant.management.dto.BoardResponse;
+import com.github.elephant.management.dto.BoardUpdateRequest;
 import com.github.elephant.management.entity.BoardEntity;
+import com.github.elephant.management.entity.BoardStatus;
 import com.github.elephant.management.exception.BoardNotFoundException;
 import com.github.elephant.management.mapper.BoardMapper;
 import com.github.elephant.management.repository.BoardRepository;
@@ -27,6 +29,7 @@ public class BoardServiceImpl implements BoardService {
         log.info("Creating board with title = {}", request.title());
 
         BoardEntity board = boardMapper.toBoardEntity(request);
+        board.setStatus(BoardStatus.DRAFT);
         return boardMapper.toBoardResponse(boardRepository.save(board));
     }
 
@@ -43,12 +46,27 @@ public class BoardServiceImpl implements BoardService {
 
     @Transactional
     @Override
+    public BoardResponse updateBoardById(Long id, BoardUpdateRequest request) {
+        log.info("Updating board with id = {}", id);
+
+        BoardEntity board = getBoardByIdOrThrow(id);
+        BoardEntity updatedBoard = boardMapper.updateBoardEntity(board, request);
+
+        return boardMapper.toBoardResponse(boardRepository.save(updatedBoard));
+    }
+
+    @Transactional
+    @Override
     public void deleteBoardById(Long id) {
         log.info("Deleting board with id = {}", id);
 
-        BoardEntity board = boardRepository.findById(id)
-                .orElseThrow(() -> new BoardNotFoundException(id));
+        BoardEntity board = getBoardByIdOrThrow(id);
 
         boardRepository.delete(board);
+    }
+
+    private BoardEntity getBoardByIdOrThrow(Long id) {
+        return boardRepository.findById(id)
+                .orElseThrow(() -> new BoardNotFoundException(id));
     }
 }

@@ -2,6 +2,7 @@ package com.github.elephant.management.service;
 
 import com.github.elephant.management.dto.TaskCreateRequest;
 import com.github.elephant.management.dto.TaskResponse;
+import com.github.elephant.management.dto.TaskUpdateRequest;
 import com.github.elephant.management.entity.BoardEntity;
 import com.github.elephant.management.entity.TaskEntity;
 import com.github.elephant.management.entity.TaskStatus;
@@ -51,6 +52,17 @@ public class TaskServiceImpl implements TaskService {
                 .stream()
                 .map(taskMapper::toTaskResponse)
                 .toList();
+    }
+
+    @Transactional
+    @Override
+    public TaskResponse updateTaskById(Long id, TaskUpdateRequest request) {
+        log.info("Updating task with id = {}", id);
+
+        TaskEntity task = getTaskByIdOrThrow(id);
+        TaskEntity updatedTask = taskMapper.updateTaskEntity(task, request);
+
+        return taskMapper.toTaskResponse(taskRepository.save(updatedTask));
     }
 
     @Transactional
