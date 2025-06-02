@@ -1,12 +1,14 @@
 package com.github.elephant.filesystem.entity;
 
+import com.github.elephant.management.entity.AttachmentEntity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
-import java.util.UUID;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -19,7 +21,8 @@ import java.util.UUID;
 public class ResourceEntity {
 
     @Id
-    private UUID id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     @Column(name = "key", nullable = false)
     private String key;
@@ -39,4 +42,7 @@ public class ResourceEntity {
     @CreatedDate
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
+
+    @OneToMany(mappedBy = "resource", fetch = FetchType.LAZY)
+    private List<AttachmentEntity> attachments = new ArrayList<>();
 }

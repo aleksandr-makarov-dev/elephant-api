@@ -6,6 +6,7 @@ import com.github.elephant.management.dto.BoardUpdateRequest;
 
 import java.util.List;
 
+
 public interface BoardService {
 
     BoardResponse createBoard(BoardCreateRequest request);

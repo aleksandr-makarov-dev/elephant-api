@@ -6,6 +6,9 @@ import jakarta.annotation.Nullable;
 import jakarta.validation.constraints.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+
 
 public record TaskCreateRequest(
         @NotBlank(message = "Title must not be empty")
@@ -22,7 +25,8 @@ public record TaskCreateRequest(
         LocalDateTime dueDate,
 
         @NotNull(message = "Board Id must be provided")
-        @Min(value = 1, message = "Board Id must be greater than 0")
-        Long boardId
+        Long boardId,
+
+        List<Long> attachments
 ) {
 }

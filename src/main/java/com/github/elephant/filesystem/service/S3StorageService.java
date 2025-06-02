@@ -5,5 +5,5 @@ import java.io.InputStream;
 public interface S3StorageService {
     void putObject(String key, String mimeType, Long size, InputStream inputStream);
 
-    String getPresignedUrl(String key, Integer expiry);
+    String getPresignedUrl(String key, Integer expireTime);
 }

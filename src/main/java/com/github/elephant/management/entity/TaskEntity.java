@@ -8,6 +8,9 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+
 
 @Entity
 @Getter
@@ -55,4 +58,8 @@ public class TaskEntity implements Serializable {
         this.board = board;
         board.getTasks().add(this);
     }
+
+    @Builder.Default
+    @OneToMany(mappedBy = "task", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<AttachmentEntity> attachments = new ArrayList<>();
 }

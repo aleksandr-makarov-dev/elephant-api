@@ -11,6 +11,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+
 @Entity
 @Getter
 @Setter
@@ -42,7 +43,7 @@ public class BoardEntity implements Serializable {
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
 
-    // TODO: add cascade delete and orphan removal
-    @OneToMany(mappedBy = "board")
+    @Builder.Default
+    @OneToMany(mappedBy = "board", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<TaskEntity> tasks = new ArrayList<>();
 }

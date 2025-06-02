@@ -4,6 +4,7 @@ import com.github.elephant.management.entity.BoardStatus;
 
 import java.time.LocalDateTime;
 
+
 public record BoardResponse(
         Long id,
         String title,

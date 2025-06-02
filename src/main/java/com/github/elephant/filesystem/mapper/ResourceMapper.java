@@ -1,30 +1,23 @@
 package com.github.elephant.filesystem.mapper;
 
 import com.github.elephant.filesystem.dto.ResourceResponse;
-import com.github.elephant.filesystem.dto.ResourceUploadResponse;
 import com.github.elephant.filesystem.entity.ResourceEntity;
 import org.springframework.stereotype.Component;
+
+import java.time.LocalDateTime;
 
 @Component
 public class ResourceMapper {
 
-    public ResourceUploadResponse toResourceUploadResponse(ResourceEntity entity) {
-        return new ResourceUploadResponse(
-                entity.getId(),
-                entity.getName(),
-                entity.getExtension(),
-                entity.getSize(),
-                entity.getMimeType()
-        );
-    }
-
-    public ResourceResponse toResourceResponse(ResourceEntity entity) {
+    public ResourceResponse toResourceResponse(ResourceEntity entity, String downloadUrl, Integer expireTime) {
         return new ResourceResponse(
                 entity.getId(),
                 entity.getName(),
                 entity.getExtension(),
                 entity.getSize(),
-                entity.getMimeType()
+                entity.getMimeType(),
+                downloadUrl,
+                LocalDateTime.now().plusSeconds(expireTime)
         );
     }
 }
