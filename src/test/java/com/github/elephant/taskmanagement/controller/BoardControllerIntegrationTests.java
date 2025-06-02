@@ -28,7 +28,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
 @Testcontainers
-class BoardControllerITest {
+class BoardControllerIntegrationTests {
 
     static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:17-alpine");
 
@@ -59,7 +59,7 @@ class BoardControllerITest {
     private ObjectMapper objectMapper;
 
     @BeforeEach
-    void setUp() {
+    void beforeEach() {
         boardRepository.deleteAll();
     }
 

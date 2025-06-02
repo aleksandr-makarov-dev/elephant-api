@@ -33,11 +33,11 @@ public class GlobalControllerAdvice {
         return ResponseEntity.status(problemDetail.getStatus()).body(problemDetail);
     }
 
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<ProblemDetail> handleException(Exception ex) {
-        ProblemDetail problemDetail = ProblemDetail
-                .forStatusAndDetail(HttpStatus.INTERNAL_SERVER_ERROR, ex.getMessage());
-
-        return ResponseEntity.status(problemDetail.getStatus()).body(problemDetail);
-    }
+//    @ExceptionHandler(Exception.class)
+//    public ResponseEntity<ProblemDetail> handleException(Exception ex) {
+//        ProblemDetail problemDetail = ProblemDetail
+//                .forStatusAndDetail(HttpStatus.INTERNAL_SERVER_ERROR, ex.getMessage());
+//
+//        return ResponseEntity.status(problemDetail.getStatus()).body(problemDetail);
+//    }
 }

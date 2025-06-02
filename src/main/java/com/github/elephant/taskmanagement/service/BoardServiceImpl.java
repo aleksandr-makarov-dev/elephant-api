@@ -24,6 +24,7 @@ public class BoardServiceImpl implements BoardService {
     private final BoardRepository boardRepository;
     private final BoardMapper boardMapper;
 
+
     @Transactional
     @Override
     public BoardResponse createBoard(BoardCreateRequest request) {
@@ -62,7 +63,6 @@ public class BoardServiceImpl implements BoardService {
         log.info("Deleting board with id = {}", id);
 
         BoardEntity board = getBoardEntityByIdOrThrow(id);
-
         boardRepository.delete(board);
     }
 
