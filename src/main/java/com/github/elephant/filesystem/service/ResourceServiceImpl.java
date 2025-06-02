@@ -1,6 +1,6 @@
 package com.github.elephant.filesystem.service;
 
-import com.github.elephant.filesystem.dto.ResourceDownloadResponse;
+import com.github.elephant.filesystem.dto.ResourcePresignedUrlResponse;
 import com.github.elephant.filesystem.dto.ResourceResponse;
 import com.github.elephant.filesystem.entity.ResourceEntity;
 import com.github.elephant.filesystem.exception.InputStreamException;
@@ -10,6 +10,7 @@ import com.github.elephant.filesystem.repository.ResourceRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FilenameUtils;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -23,8 +24,10 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class ResourceServiceImpl implements ResourceService {
 
+    @Value("${spring.minio.expiry}")
+    private int EXPIRE_TIME;
+
     private static final String TMP_DIR = "tmp";
-    private static final int EXPIRE_TIME = 3600;
 
     private final S3StorageService s3StorageService;
 
@@ -59,12 +62,11 @@ public class ResourceServiceImpl implements ResourceService {
                     .size(fileSize)
                     .build();
 
-            String presignedUrl = s3StorageService.getPresignedUrl(resourceEntity.getKey(), EXPIRE_TIME);
+            ResourcePresignedUrlResponse presignedUrl = s3StorageService.getPresignedUrl(resourceEntity.getKey(), EXPIRE_TIME);
 
             return resourceMapper.toResourceResponse(
                     resourceRepository.save(resourceEntity),
-                    presignedUrl,
-                    EXPIRE_TIME
+                    presignedUrl
             );
         } catch (IOException e) {
             throw new InputStreamException(e);
@@ -73,15 +75,17 @@ public class ResourceServiceImpl implements ResourceService {
 
     @Transactional
     @Override
-    public ResourceDownloadResponse downloadResourceById(Long id) {
+    public ResourcePresignedUrlResponse getPresignedUrlById(Long id) {
 
         log.info("Downloading file with id = {}", id);
 
-        ResourceEntity resource = resourceRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Resource with id = %s not found".formatted(id)));
+        ResourceEntity resource = getResourceEntityByIdOrThrow(id);
 
-        String presignedUrl = s3StorageService.getPresignedUrl(resource.getKey(), EXPIRE_TIME);
+        return s3StorageService.getPresignedUrl(resource.getKey(), EXPIRE_TIME);
+    }
 
-        return new ResourceDownloadResponse(presignedUrl, LocalDateTime.now().plusSeconds(EXPIRE_TIME));
+    @Override
+    public ResourceEntity getResourceEntityByIdOrThrow(Long id) {
+        return resourceRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(id));
     }
 }

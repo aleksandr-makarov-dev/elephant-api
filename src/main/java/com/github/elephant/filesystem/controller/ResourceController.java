@@ -1,6 +1,6 @@
 package com.github.elephant.filesystem.controller;
 
-import com.github.elephant.filesystem.dto.ResourceDownloadResponse;
+import com.github.elephant.filesystem.dto.ResourcePresignedUrlResponse;
 import com.github.elephant.filesystem.dto.ResourceResponse;
 import com.github.elephant.filesystem.service.ResourceService;
 import lombok.RequiredArgsConstructor;
@@ -23,7 +23,7 @@ public class ResourceController {
     }
 
     @GetMapping("download/{id}")
-    public ResponseEntity<ResourceDownloadResponse> downloadResource(@PathVariable("id") Long id) {
-        return ResponseEntity.status(HttpStatus.OK).body(resourceService.downloadResourceById(id));
+    public ResponseEntity<ResourcePresignedUrlResponse> downloadResource(@PathVariable("id") Long id) {
+        return ResponseEntity.status(HttpStatus.OK).body(resourceService.getPresignedUrlById(id));
     }
 }

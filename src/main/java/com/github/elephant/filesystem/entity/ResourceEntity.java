@@ -1,6 +1,6 @@
 package com.github.elephant.filesystem.entity;
 
-import com.github.elephant.management.entity.AttachmentEntity;
+import com.github.elephant.taskmanagement.entity.AttachmentEntity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;

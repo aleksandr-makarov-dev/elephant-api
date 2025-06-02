@@ -10,6 +10,7 @@ spring:
     access-key: ${MINIO_ACCESS_KEY:minioadmin}
     secret-key: ${MINIO_SECRET_KEY:minioadmin}
     bucket: ${MINIO_BUCKET:elephant}
+    expiry: 3600
   servlet:
     multipart:
       max-file-size: 100MB

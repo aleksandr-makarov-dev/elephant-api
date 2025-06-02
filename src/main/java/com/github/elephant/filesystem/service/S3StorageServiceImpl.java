@@ -1,5 +1,6 @@
 package com.github.elephant.filesystem.service;
 
+import com.github.elephant.filesystem.dto.ResourcePresignedUrlResponse;
 import com.github.elephant.filesystem.exception.S3StorageException;
 import io.minio.*;
 import io.minio.http.Method;
@@ -9,13 +10,12 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.io.InputStream;
+import java.time.LocalDateTime;
 import java.util.concurrent.TimeUnit;
 
 @Service
 @RequiredArgsConstructor
 public class S3StorageServiceImpl implements S3StorageService {
-
-    private static final int PRESIGNED_URL_EXPIRY = 3600;
 
     private final MinioClient minioClient;
 
@@ -54,7 +54,7 @@ public class S3StorageServiceImpl implements S3StorageService {
         }
     }
 
-    public String getPresignedUrl(String key, Integer expireTime) {
+    public ResourcePresignedUrlResponse getPresignedUrl(String key, Integer expireTime) {
         GetPresignedObjectUrlArgs getPresignedObjectUrlArgs = GetPresignedObjectUrlArgs.builder()
                 .bucket(bucket)
                 .object(key)
@@ -63,7 +63,9 @@ public class S3StorageServiceImpl implements S3StorageService {
                 .build();
 
         try {
-            return minioClient.getPresignedObjectUrl(getPresignedObjectUrlArgs);
+            String presignedUrl = minioClient.getPresignedObjectUrl(getPresignedObjectUrlArgs);
+
+            return new ResourcePresignedUrlResponse(presignedUrl, LocalDateTime.now().plusSeconds(expireTime));
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
